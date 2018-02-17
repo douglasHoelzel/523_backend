@@ -1,0 +1,3 @@
+flask
+quandl
+flask_cors
