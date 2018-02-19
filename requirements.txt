@@ -1,3 +1,5 @@
 flask
 quandl
 flask_cors
+numpy 
+pandas
