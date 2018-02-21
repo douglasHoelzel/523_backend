@@ -21,16 +21,17 @@ def pull_data(stocks, start_date, end_date):
 
     return stock_dict
 
-#Log returns, takes in dict of pd dataframes
+#Log returns, appends to the stock_dict with a new return column
 def calculate_returns(stock_dict):
     
-    return_dict = {}
+    #return_dict = {}
     for stock in stock_dict:
-        #return_dict[stock] = np.log(1+stock_dict[stock]['Adj_Close'].pct_change().dropna())
-        temp = np.log(1+stock_dict[stock]['Adj_Close'].pct_change().dropna())
-        return_dict[stock] = temp.values.tolist()
+        temp = np.log(1+stock_dict[stock]['Adj_Close'].pct_change())
+        temp = temp.rename('Log Returns')
+        stock_dict[stock] = stock_dict[stock].join(temp).dropna()
+        #return_dict[stock] = temp.values.tolist() #Change back to pd dataframe
 
-    return return_dict
+    return stock_dict #return_dict
 
         
 

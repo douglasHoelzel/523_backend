@@ -27,9 +27,7 @@ def parse_info():
     #Calculate log returns
     return_dict = calculate_returns(stock_dict)
 
-    return jsonify(return_dict)
-    
-    #return jsonify(pull_data(stocks,start_date,end_date)) 
+    #return jsonify(return_dict)
     
 
 if __name__ == "__main__":
