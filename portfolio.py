@@ -4,9 +4,10 @@ import pandas
 class portfolio(object):
     
     #Default constructor
-    def __init__(self, return_dict, prestart_return_dict, frequency): #frequency can be daily, weekly, monthly
+    def __init__(self, return_dict, interest_rates, prestart_return_dict, frequency): #frequency can be daily, weekly, monthly
         self.tickers = return_dict.keys() #Stock symbols are the keys 
         self.return_dict = return_dict
+        self.interest_rates = interest_rates
         self.prestart_return_dict = prestart_return_dict #Used to calculate the first covariance value
         self.dates = return_dict[next(iter(return_dict))].index #Finds an arbitrary key, gets the datetime index from it
         self.all_dates = return_dict[next(iter(self.return_dict))].resample('D').sum() #Includes NAN dates
