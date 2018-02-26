@@ -12,9 +12,15 @@ def pull_data(stocks, start_date, end_date):
 
     stock_dict = {}
 
+    #Calculate a new start date to get an extra month of data
+    day = 1
+    month = start_date.month - 1
+    year = start_date.year
+    new_start_date = pd.to_datetime(str(year)+'-'+str(month)+'-'+str(day))
+
     for stock in stocks:
         stock_data = q.get("EOD/{0}.11".format(stock), #Only pull closing price
-				start_date="{0}".format(start_date), 
+				start_date="{0}".format(new_start_date), #Pull an extra month of data
 				end_date="{0}".format(end_date))
             
         stock_dict[stock] = stock_data 

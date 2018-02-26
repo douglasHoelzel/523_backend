@@ -4,10 +4,17 @@ import pandas
 class portfolio(object):
     
     #Default constructor
-    def __init__(self, return_dict):
+    def __init__(self, return_dict, frequency): #frequency can be daily, weekly, monthly
         self.tickers = return_dict.keys() #Stock symbols are the keys 
         self.return_dict = return_dict
         self.dates = return_dict[next(iter(return_dict))].index #Finds an arbitrary key, gets the datetime index from it
+        self.frequency = frequency
+        self.rebalance_dates = None
+        self.rebalance_date_returns = None #empty for now, will be appended to later
+        self.calculate_rebalance_dates() #Calculate the rebalence dates depending on frequency
+
+    def calculate_rebalance_dates():
+        
 
     def calculate_total_return(): #matrix of assets (N [days] * M [assets]), vector of weightings (M*1)
         
@@ -28,7 +35,7 @@ class portfolio(object):
         #Output
         #A vector representing the return for the portfolio for each day over the period
 
-    def calculate_st_dev(): #Weight vector (1*M), return_dict (so that we can access log return for each asset) (ALREADY AVAILABLE VIA CONSTRUCTOR)
+    def calculate_st_dev(): #Weight vector (1*M), rebalancing frequency, cov-interval (4 weeks prior), return_dict (so that we can access log return for each asset) (ALREADY AVAILABLE VIA CONSTRUCTOR)
         
         #Description
         #w'Sw

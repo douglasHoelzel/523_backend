@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from data import *
+import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
@@ -18,8 +19,8 @@ def hello_world():
 def parse_info():
     
     stocks = request.get_json()['assets']
-    start_date = request.get_json()['start_date']
-    end_date = request.get_json()['end_date']
+    start_date = pd.to_datetime(request.get_json()['start_date']) #Datetime object
+    end_date = pd.to_datetime(request.get_json()['end_date'])
 
     #Initial data pull
     stock_dict = pull_data(stocks, start_date, end_date)
