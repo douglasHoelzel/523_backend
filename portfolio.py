@@ -1,5 +1,5 @@
-import numpy
-import pandas
+import numpy as np
+import pandas as pd
 
 class portfolio(object):
     
@@ -9,7 +9,7 @@ class portfolio(object):
         self.return_dict = return_dict
         self.interest_rates = interest_rates
         self.portfolio = None
-        self.weightings = None
+        self.weights = np.ones(len(self.tickers)) #Initialize as a array of ones
         self.prestart_return_dict = prestart_return_dict #Used to calculate the first covariance value
         self.dates = return_dict[next(iter(return_dict))].index #Finds an arbitrary key, gets the datetime index from it
         self.all_dates = return_dict[next(iter(self.return_dict))].resample('D').sum() #Includes NAN dates
@@ -30,6 +30,7 @@ class portfolio(object):
             temp = self.return_dict[next(iter(self.return_dict))].resample('M').sum()
             self.rebalance_dates = temp.index
 
+    #Build an n by m portfolio with log returns for all assets over date range
     def calculate_portfolio(self):
         #Compute n by m portfolio
         temp_dict = {}
@@ -37,11 +38,11 @@ class portfolio(object):
         for key in self.return_dict.keys():
             temp_dict[key] = self.return_dict[key]['Log Returns']
     
-        self.portfolio = pd.DataFrame(temp_dict)
+        self.portfolio = pd.DataFrame(temp_dict) 
             
     #Portfolio return (scalar)
-    def calculate_total_return(assets, weightings): 
-        returns_vector = assets.dot(weightings)
+    def calculate_total_return(assets, weights): 
+        returns_vector = assets.dot(weights)
         return returns_vector.sum()
 
     #Portfolio return (vector)
