@@ -12,15 +12,26 @@ class portfolio(object):
         self.frequency = frequency
         self.rebalance_dates = None
         self.rebalance_date_returns = None #empty for now, will be appended to later
-        self.fill_constructor() #Calculate the rebalence dates depending on frequency
+        self.fill_constructor() #Calculate the rebalance dates depending on frequency
 
-    def fill_constructor():
-        #Fill in methods in constuctor
-
-    def calculate_total_return(assets, weightings): #matrix of assets (N [days] * M [assets]), vector of weightings (M*1)
+    #Fill in rebalance dates
+    def fill_constructor(self):
+        if self.frequency == 'daily': #Handle daily case
+            self.rebalance_dates = self.dates
+        elif self.frequency == 'weekly': #Handle weekly case
+            temp = self.return_dict[next(iter(self.return_dict))].resample('W').sum()
+            self.rebalance_dates = temp.index
+        elif self.frequency == 'monthly': #Handle monthly case
+            temp = self.return_dict[next(iter(self.return_dict))].resample('M').sum()
+            self.rebalance_dates = temp.index
+            
+            
+    #Portfolio return (scalar)
+    def calculate_total_return(assets, weightings): 
         returns_vector = assets.dot(weightings)
         return returns_vector.sum()
 
+    #Portfolio return (vector)
     def calculate_vector_return(): #matrix of assets (N [days] * M [assets]), vector of weightings (M*1)
         
         #Description
