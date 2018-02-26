@@ -13,9 +13,10 @@ class portfolio(object):
         self.rebalance_date_returns = None #empty for now, will be appended to later
         self.calculate_rebalance_dates() #Calculate the rebalence dates depending on frequency
 
-    def calculate_rebalance_dates():
+    def calculate_total_return(assets, weightings): #matrix of assets (N [days] * M [assets]), vector of weightings (M*1)
+        returns_vector = assets.dot(weightings)
+        return returns_vector.sum()
         
-
     def calculate_total_return(): #matrix of assets (N [days] * M [assets]), vector of weightings (M*1)
         
         #Description
