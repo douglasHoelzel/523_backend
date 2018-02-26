@@ -4,16 +4,17 @@ import pandas
 class portfolio(object):
     
     #Default constructor
-    def __init__(self, return_dict, frequency): #frequency can be daily, weekly, monthly
+    def __init__(self, return_dict, prestart_return_dict, frequency): #frequency can be daily, weekly, monthly
         self.tickers = return_dict.keys() #Stock symbols are the keys 
         self.return_dict = return_dict
+        self.prestart_return_dict = prestart_return_dict #Used to calculate the first covariance value
         self.dates = return_dict[next(iter(return_dict))].index #Finds an arbitrary key, gets the datetime index from it
         self.frequency = frequency
         self.rebalance_dates = None
         self.rebalance_date_returns = None #empty for now, will be appended to later
-        self.calculate_rebalance_dates() #Calculate the rebalence dates depending on frequency
+        self.fill_constructor() #Calculate the rebalence dates depending on frequency
 
-    def calculate_rebalance_dates():
+    def fill_constructor():
         
 
     def calculate_total_return(): #matrix of assets (N [days] * M [assets]), vector of weightings (M*1)

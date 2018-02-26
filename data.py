@@ -11,6 +11,7 @@ def pull_data(stocks, start_date, end_date):
     #TODO: Add validation for stocks
 
     stock_dict = {}
+    prestart_dict = {}
 
     #Calculate a new start date to get an extra month of data
     day = 1
@@ -22,10 +23,12 @@ def pull_data(stocks, start_date, end_date):
         stock_data = q.get("EOD/{0}.11".format(stock), #Only pull closing price
 				start_date="{0}".format(new_start_date), #Pull an extra month of data
 				end_date="{0}".format(end_date))
-            
-        stock_dict[stock] = stock_data 
+        
+        prestart_dict[stock] = stock_data.loc[new_start_date:start_date]
+        stock_dict[stock] = stock_data.loc[start_date:end_date]
 
-    return stock_dict
+    return {'stock_dict':stock_dict, 
+            'prestart_dict':prestart_dict}
 
 #Log returns, appends to the stock_dict with a new return column
 def calculate_returns(stock_dict):

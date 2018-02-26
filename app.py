@@ -23,12 +23,17 @@ def parse_info():
     end_date = pd.to_datetime(request.get_json()['end_date'])
 
     #Initial data pull
-    stock_dict = pull_data(stocks, start_date, end_date)
+    results = pull_data(stocks, start_date, end_date) 
 
     #Calculate log returns
-    return_dict = calculate_returns(stock_dict)
+    return_dict = calculate_returns(results['stock_dict'])
+    prestart_return_dict = calculate_returns(results['prestart_dict'])
 
-    #return jsonify(return_dict)
+
+    #BELOW THIS LINE IS USED FOR TESTING ON LOCALHOST
+    test_date = prestart_return_dict['IVV'].index.strftime('%Y-%m-%d')[0]
+
+    return test_date
     
 
 if __name__ == "__main__":
