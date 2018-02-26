@@ -28,7 +28,17 @@ def pull_data(stocks, start_date, end_date):
         stock_dict[stock] = stock_data.loc[start_date:end_date]
 
     return {'stock_dict':stock_dict, 
-            'prestart_dict':prestart_dict}
+            'prestart_dict':prestart_dict
+            }
+
+#Proxied by the US 1 year treasury (beginning of the period)
+def get_risk_free_rate(start_date):
+    rf_rate = q.get("FRED/DTB1YR", start_date="{0}".format(start_date),end_date="{0}".format(start_date))["Value"][0]
+    annualized_rf_rate = rf_rate / 252 #252 trading days in year
+
+    return {"rf_rate": rf_rate,
+            "annualized_rf_rate": annualized_rf_rate
+            }
 
 #Log returns, appends to the stock_dict with a new return column
 def calculate_returns(stock_dict):

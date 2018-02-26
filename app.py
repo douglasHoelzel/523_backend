@@ -25,6 +25,9 @@ def parse_info():
     #Initial data pull
     results = pull_data(stocks, start_date, end_date) 
 
+    #Get daily and annual risk free rate
+    interest_rates = get_risk_free_rate(start_date)
+
     #Calculate log returns
     return_dict = calculate_returns(results['stock_dict'])
     prestart_return_dict = calculate_returns(results['prestart_dict'])
@@ -33,7 +36,7 @@ def parse_info():
     #BELOW THIS LINE IS USED FOR TESTING ON LOCALHOST
     test_date = prestart_return_dict['IVV'].index.strftime('%Y-%m-%d')[0]
 
-    return test_date
+    return interest_rates['annualized_rf_rate'].astype('str')
     
 
 if __name__ == "__main__":
