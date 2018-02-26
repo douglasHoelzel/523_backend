@@ -9,6 +9,7 @@ class portfolio(object):
         self.return_dict = return_dict
         self.interest_rates = interest_rates
         self.portfolio = None
+        self.weightings = None
         self.prestart_return_dict = prestart_return_dict #Used to calculate the first covariance value
         self.dates = return_dict[next(iter(return_dict))].index #Finds an arbitrary key, gets the datetime index from it
         self.all_dates = return_dict[next(iter(self.return_dict))].resample('D').sum() #Includes NAN dates
