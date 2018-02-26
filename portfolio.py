@@ -9,6 +9,7 @@ class portfolio(object):
         self.return_dict = return_dict
         self.prestart_return_dict = prestart_return_dict #Used to calculate the first covariance value
         self.dates = return_dict[next(iter(return_dict))].index #Finds an arbitrary key, gets the datetime index from it
+        self.actual_dates = return_dict[next(iter(self.return_dict))].resample('D').sum() #Includes NAN dates
         self.frequency = frequency
         self.rebalance_dates = None
         self.rebalance_date_returns = None #empty for now, will be appended to later
