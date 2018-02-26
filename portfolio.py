@@ -14,23 +14,12 @@ class portfolio(object):
         self.rebalance_date_returns = None #empty for now, will be appended to later
         self.fill_constructor() #Calculate the rebalence dates depending on frequency
 
-<<<<<<< HEAD
     def fill_constructor():
-=======
+        #Fill in methods in constuctor
+
     def calculate_total_return(assets, weightings): #matrix of assets (N [days] * M [assets]), vector of weightings (M*1)
         returns_vector = assets.dot(weightings)
         return returns_vector.sum()
->>>>>>> ec80e615a6210cfe2b37ee378d8e5a57f20ad49c
-        
-    def calculate_total_return(): #matrix of assets (N [days] * M [assets]), vector of weightings (M*1)
-        
-        #Description
-        #We take the two matracies, and multiple them together ((N*M)*(M*1))
-        #This yields a vector (M*1) of daily returns for the portfolio
-        #We can sum this vector to give a return over the period (whatever date is passed in by user)
-
-        #Output
-        #A scalar representing the return for the period
 
     def calculate_vector_return(): #matrix of assets (N [days] * M [assets]), vector of weightings (M*1)
         
