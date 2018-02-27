@@ -41,8 +41,8 @@ class portfolio(object):
         self.portfolio = pd.DataFrame(temp_dict) 
             
     #Portfolio return (scalar)
-    def calculate_total_return(assets, weights): 
-        returns_vector = assets.dot(weights)
+    def calculate_total_return(weights): 
+        returns_vector = self.portfolio.dot(weights)
         return returns_vector.sum()
 
     #Portfolio return (vector)
