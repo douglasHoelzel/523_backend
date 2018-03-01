@@ -37,7 +37,7 @@ def get_risk_free_rate(start_date):
     daily_rf_rate = rf_rate / 252 #252 trading days in year
 
     return {"rf_rate": rf_rate,
-            "annualized_rf_rate": daily_rf_rate
+            "daily_rf_rate": daily_rf_rate
             }
 
 #Log returns, appends to the stock_dict with a new return column
