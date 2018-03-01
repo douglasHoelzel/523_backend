@@ -34,7 +34,7 @@ def pull_data(stocks, start_date, end_date):
 #Proxied by the US 1 year treasury (beginning of the period)
 def get_risk_free_rate(start_date):
     rf_rate = q.get("FRED/DTB1YR", start_date="{0}".format(start_date),end_date="{0}".format(start_date))["Value"][0]
-    daily_rf_rate = rf_rate / 252 #252 trading days in year
+    daily_rf_rate = np.power((rf_rate + 1), 1.0/252) - 1 #deannualize rf rate
 
     return {"rf_rate": rf_rate,
             "daily_rf_rate": daily_rf_rate
