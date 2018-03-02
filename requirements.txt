@@ -3,3 +3,4 @@ quandl
 flask_cors
 numpy 
 pandas
+scipy
