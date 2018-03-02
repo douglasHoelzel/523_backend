@@ -76,7 +76,7 @@ class Portfolio(object):
         cons = {'type':'eq', 
                 'fun': lambda x: np.sum(np.abs(x)) - 1}  #Weights must sum to one (absolute value)
         #Element bounds
-        bounds = [(-1, 1.5)] * len(self.initial_weights) #Shorts are allowed, leverage of up to 1.5 times
+        bounds = [(-1., 1.)] * len(self.initial_weights) #Shorts are allowed, no leverage
         date_len = len(self.rebalance_dates)
     
         for i in range(date_len):
@@ -90,11 +90,12 @@ class Portfolio(object):
             
             results = scipy.optimize.minimize(self.objective_function, self.initial_weights, args=(sliced_assets), 
                                                 method= "SLSQP", constraints=cons, bounds=bounds, 
-                                                options={'disp': True, 
+                                                options={'disp': True, #Turn off display in production
                                                          'maxiter': 1000})
             
             #Assign weights
-            self.optimized_weights[self.rebalance_dates[i].strftime('%Y-%m-%d')] = results.x
+            weight_list = [float(weight) for weight in results.x]
+            self.optimized_weights[self.rebalance_dates[i].strftime('%Y-%m-%d')] = list(zip(sliced_assets.columns,weight_list)) #Create iterable to keep track of ordering
             
             #Assign return values
             self.rebalance_date_returns[self.rebalance_dates[i].strftime('%Y-%m-%d')] = float(self.calculate_total_return(results.x, sliced_assets))

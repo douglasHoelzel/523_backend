@@ -39,7 +39,9 @@ def parse_info():
 
     #BELOW THIS LINE IS USED FOR TESTING ON LOCALHOST
 
-    return jsonify(output['optimized_returns'])
+    return jsonify({"optimized_returns": output['optimized_returns'],
+                   "optimized_weights": output['optimized_weights']  
+                     })
     
 
 if __name__ == "__main__":
