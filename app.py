@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from data import *
+from portfolio import Portfolio
 import pandas as pd
 
 app = Flask(__name__)
@@ -21,6 +22,7 @@ def parse_info():
     stocks = request.get_json()['assets']
     start_date = pd.to_datetime(request.get_json()['start_date']) #Datetime object
     end_date = pd.to_datetime(request.get_json()['end_date'])
+    frequency = request.get_json()['frequency']
 
     #Initial data pull
     results = pull_data(stocks, start_date, end_date) 
@@ -32,11 +34,12 @@ def parse_info():
     return_dict = calculate_returns(results['stock_dict'])
     prestart_return_dict = calculate_returns(results['prestart_dict'])
 
+    portfolio = Portfolio(start_date, end_date, return_dict, interest_rates, prestart_return_dict, frequency)
+    output = portfolio.optimize_portfolio()
 
     #BELOW THIS LINE IS USED FOR TESTING ON LOCALHOST
-    test_date = prestart_return_dict['IVV'].index.strftime('%Y-%m-%d')[0]
 
-    return interest_rates['annualized_rf_rate'].astype('str')
+    return jsonify(output['optimized_returns'])
     
 
 if __name__ == "__main__":
