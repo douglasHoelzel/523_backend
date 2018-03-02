@@ -3,24 +3,29 @@ import pandas as pd
 import scipy.optimize
 
 class Portfolio(object):
+
+    ####### Notes #######
+
+    #Right now we're only concerned with monthly frequency
+    #Need to explore new objective functions to optimize for
+    #Need to find a volatility proxy that will work with shorter intervals
     
-    #Default constructor
-    def __init__(self, start_date, end_date, return_dict, interest_rates, prestart_return_dict, frequency): #frequency can be daily, weekly, monthly
-        self.tickers = return_dict.keys() #Stock symbols are the keys 
+    def __init__(self, start_date, end_date, return_dict, interest_rates, prestart_return_dict, frequency): 
+        self.number_assets = len(return_dict.keys()) #Stock symbols are the keys 
         self.start_date = start_date
         self.end_date = end_date
         self.return_dict = return_dict
         self.interest_rates = interest_rates
         self.assets = None
-        self.initial_weights = np.ones(len(self.tickers)) / len(self.tickers) #Initialize to equal weight
+        self.initial_weights = np.ones(self.number_assets) / self.number_assets #Initialize to equal weight
         self.optimized_weights = {} #see optimize portfolio
-        self.prestart_return_dict = prestart_return_dict #Used to calculate the first covariance value
-        self.dates = return_dict[next(iter(return_dict))].index #Finds an arbitrary key, gets the datetime index from it
+        self.prestart_return_dict = prestart_return_dict #Would be used in alternative volatility calculations
+        self.dates = return_dict[next(iter(return_dict))].index #Potentially useful if we do daily values
         self.frequency = frequency
         self.rebalance_dates = None
         self.rebalance_date_returns = {} #see optimize portfolio
-        self.calculate_rebalance_date() #Calculate the rebalance dates depending on frequency
-        self.calculate_assets() #Forms n * m matrix 
+        self.calculate_rebalance_date() #Fill self.rebalance_dates
+        self.calculate_assets() #Fills self.assets
 
     #Fill in rebalance dates
     def calculate_rebalance_date(self):
@@ -36,9 +41,8 @@ class Portfolio(object):
                 date_list.append(t)
             self.rebalance_dates = date_list
 
-    #Build an n by m portfolio with log returns for all assets over date range
+    #Build an n (dates) by m (log returns) portfolio for all assets
     def calculate_assets(self):
-        #Compute n by m asset matrix
         temp_dict = {}
         for key in self.return_dict.keys():
             temp_dict[key] = self.return_dict[key]['Log Returns']
@@ -53,7 +57,8 @@ class Portfolio(object):
     #Portfolio return (vector)
     def calculate_vector_return(self, weights, assets): 
         return assets.dot(weights)
-        
+
+    #Measure of volatility, denominator of the sharpe_ratio   
     def sum_squared_differences(self, weights, assets):
         portfolio_return = self.calculate_vector_return(weights, assets) 
         portfolio_mean_return = portfolio_return.mean()
@@ -61,6 +66,7 @@ class Portfolio(object):
 
         return sum_squared_differences
 
+    #Risk adjusted measurement of return
     def sharpe_ratio(self, weights, assets): 
         portfolio_return = self.calculate_vector_return(weights, assets)
         portfolio_return_minus_rf = portfolio_return - self.interest_rates["daily_rf_rate"]
@@ -68,17 +74,21 @@ class Portfolio(object):
 
         return sharpe_ratio
 
+    #Negates objective function, will add more objective functions in the future
     def objective_function(self, weights, assets):
         return (-1 * self.sharpe_ratio(weights, assets))
 
     def optimize_portfolio(self):
+        
         #Constraints
         cons = {'type':'eq', 
                 'fun': lambda x: np.sum(np.abs(x)) - 1}  #Weights must sum to one (absolute value)
+
         #Element bounds
         bounds = [(-1., 1.)] * len(self.initial_weights) #Shorts are allowed, no leverage
+        
+        
         date_len = len(self.rebalance_dates)
-    
         for i in range(date_len):
             if date_len - i == 1:
                 #This is the last value
@@ -93,14 +103,15 @@ class Portfolio(object):
                                                 options={'disp': True, #Turn off display in production
                                                          'maxiter': 1000})
             
-            #Assign weights
-            weight_list = [float(weight) for weight in results.x]
-            self.optimized_weights[self.rebalance_dates[i].strftime('%Y-%m-%d')] = list(zip(sliced_assets.columns,weight_list)) #Create iterable to keep track of ordering
+            #Assign optimized weights
+            weight_list = [float(weight) for weight in results.x] #decimal
+            weights_pct = ["{0:.3f}%".format(weight * 100) for weight in results.x] #percent
+            self.optimized_weights[self.rebalance_dates[i].strftime('%Y-%m-%d')] = list(zip(sliced_assets.columns,weight_list,weights_pct)) #stock symbol, decimal, percent
             
             #Assign return values
             self.rebalance_date_returns[self.rebalance_dates[i].strftime('%Y-%m-%d')] = float(self.calculate_total_return(results.x, sliced_assets))
         
-        return {"optimized_weights":self.optimized_weights,
+        return {"optimized_weights": self.optimized_weights,
                 "optimized_returns": self.rebalance_date_returns
                 }
 
