@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import scipy.optimize
 
-class portfolio(object):
+class Portfolio(object):
     
     #Default constructor
     def __init__(self, start_date, end_date, return_dict, interest_rates, prestart_return_dict, frequency): #frequency can be daily, weekly, monthly
