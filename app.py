@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from data import *
+from data import pull_data, get_risk_free_rate, calculate_returns
 from portfolio import Portfolio
 import pandas as pd
 
@@ -44,5 +44,10 @@ def parse_info():
                      })
     
 
+#For testing
+#if __name__ == "__main__":
+#	app.run(debug=True, port=8080)
+
+#For Production
 if __name__ == "__main__":
-	app.run(debug=True, port=8080)
+	app.run(debug=True, host='0.0.0.0', port=8080)
