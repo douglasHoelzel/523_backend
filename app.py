@@ -28,7 +28,7 @@ def parse_info():
     results = pull_data(stocks, start_date, end_date) 
 
     #Get daily and annual risk free rate
-    interest_rates = get_risk_free_rate(start_date)
+    interest_rates = get_risk_free_rate(start_date,end_date)
 
     #Calculate log returns
     return_dict = calculate_returns(results['stock_dict'])
