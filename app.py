@@ -32,9 +32,9 @@ def parse_info():
 
     #Calculate log returns
     return_dict = calculate_returns(results['stock_dict'])
-    prestart_return_dict = calculate_returns(results['prestart_dict'])
+    #prestart_return_dict = calculate_returns(results['prestart_dict'])
 
-    portfolio = Portfolio(start_date, end_date, return_dict, interest_rates, prestart_return_dict, frequency)
+    portfolio = Portfolio(start_date, end_date, return_dict, interest_rates, frequency)
     output = portfolio.optimize_portfolio()
 
     #BELOW THIS LINE IS USED FOR TESTING ON LOCALHOST

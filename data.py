@@ -11,24 +11,24 @@ def pull_data(stocks, start_date, end_date):
     #TODO: Add validation for stocks
 
     stock_dict = {}
-    prestart_dict = {}
+    #prestart_dict = {}
 
     #Calculate a new start date to get an extra month of data
-    day = 1
-    month = start_date.month - 1
-    year = start_date.year
-    new_start_date = pd.to_datetime(str(year)+'-'+str(month)+'-'+str(day))
+    #day = 1
+    #month = start_date.month - 1
+    #year = start_date.year
+    #new_start_date = pd.to_datetime(str(year)+'-'+str(month)+'-'+str(day))
 
     for stock in stocks:
         stock_data = q.get("EOD/{0}.11".format(stock), #Only pull closing price
-				start_date="{0}".format(new_start_date), #Pull an extra month of data
+				start_date="{0}".format(start_date), #Pull an extra month of data
 				end_date="{0}".format(end_date))
         
-        prestart_dict[stock] = stock_data.loc[new_start_date:start_date]
-        stock_dict[stock] = stock_data.loc[start_date:end_date]
+        #prestart_dict[stock] = stock_data.loc[new_start_date:start_date]
+        stock_dict[stock] = stock_data#.loc[start_date:end_date]
 
-    return {'stock_dict':stock_dict, 
-            'prestart_dict':prestart_dict
+    return {'stock_dict':stock_dict 
+            #'prestart_dict':prestart_dict
             }
 
 #Proxied by the US 1 year treasury (beginning of the period)

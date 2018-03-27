@@ -10,7 +10,7 @@ class Portfolio(object):
     #Need to explore new objective functions to optimize for
     #Need to find a volatility proxy that will work with shorter intervals
     
-    def __init__(self, start_date, end_date, return_dict, interest_rates, prestart_return_dict, frequency): 
+    def __init__(self, start_date, end_date, return_dict, interest_rates, frequency): 
         self.number_assets = len(return_dict.keys()) #Stock symbols are the keys 
         self.start_date = start_date
         self.end_date = end_date
@@ -19,7 +19,7 @@ class Portfolio(object):
         self.assets = None
         self.initial_weights = np.ones(self.number_assets) / self.number_assets #Initialize to equal weight
         self.optimized_weights = {} #see optimize portfolio
-        self.prestart_return_dict = prestart_return_dict #Would be used in alternative volatility calculations
+        #self.prestart_return_dict = prestart_return_dict #Would be used in alternative volatility calculations
         self.dates = return_dict[next(iter(return_dict))].index #Potentially useful if we do daily values
         self.frequency = frequency
         self.rebalance_dates = None
