@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from data import pull_data, get_risk_free_rate, calculate_returns
 from portfolio import Portfolio
+from benchmark import Benchmark
 import pandas as pd
 
 app = Flask(__name__)
@@ -20,27 +21,36 @@ def hello_world():
 def parse_info():
     
     stocks = request.get_json()['assets']
+    benchmark = request.get_json()['benchmark']
     start_date = pd.to_datetime(request.get_json()['start_date']) #Datetime object
     end_date = pd.to_datetime(request.get_json()['end_date'])
     frequency = request.get_json()['frequency']
 
     #Initial data pull
     results = pull_data(stocks, start_date, end_date) 
+    benchmark_results = pull_data(benchmark, start_date, end_date)
 
     #Get daily and annual risk free rate
     interest_rates = get_risk_free_rate(start_date,end_date)
 
     #Calculate log returns
     return_dict = calculate_returns(results['stock_dict'])
-    #prestart_return_dict = calculate_returns(results['prestart_dict'])
+    benchmark_return_dict = calculate_returns(benchmark_results['stock_dict'])
 
+    #Output for the portfolio
     portfolio = Portfolio(start_date, end_date, return_dict, interest_rates, frequency)
     output = portfolio.optimize_portfolio()
+
+    #Output for the benchmark
+    benchmark = Benchmark(benchmark_return_dict,benchmark)
+    benchmark_output = benchmark.form_returns()
 
     #BELOW THIS LINE IS USED FOR TESTING ON LOCALHOST
 
     return jsonify({"optimized_returns": output['optimized_returns'],
-                   "optimized_weights": output['optimized_weights']  
+                   "optimized_weights": output['optimized_weights'],
+                   "benchmark_returns": benchmark_output['benchmark_monthly_returns'],
+                   "benchmark_cumulative_returns": benchmark_output['benchmark_cumulative_returns']
                      })
     
 @app.route('/api/test', methods=['GET']) 
