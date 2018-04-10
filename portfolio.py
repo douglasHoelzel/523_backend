@@ -10,7 +10,7 @@ class Portfolio(object):
     #Need to explore new objective functions to optimize for
     #Need to find a volatility proxy that will work with shorter intervals
     
-    def __init__(self, start_date, end_date, return_dict, interest_rates, frequency): 
+    def __init__(self, start_date, end_date, return_dict, interest_rates, frequency, transaction_costs): 
         self.number_assets = len(return_dict.keys()) #Stock symbols are the keys 
         self.start_date = start_date
         self.end_date = end_date
@@ -26,6 +26,7 @@ class Portfolio(object):
         self.rebalance_date_returns = {} #see optimize portfolio
         self.calculate_rebalance_date() #Fill self.rebalance_dates
         self.calculate_assets() #Fills self.assets
+        self.transaction_costs = transaction_costs # 0 or 1
 
     #Fill in rebalance dates
     def calculate_rebalance_date(self):
@@ -96,8 +97,11 @@ class Portfolio(object):
             else:
                 #Either the first or an inner value
                 sliced_assets = self.assets.loc[self.rebalance_dates[i] : self.rebalance_dates[i+1]]
-                
             
+            #If transaction costs, subtract 2.5% from returns on rebalance date
+            if self.transaction_costs == 1:
+                sliced_assets.iloc[0] = sliced_assets.iloc[0] - .025
+                
             results = scipy.optimize.minimize(self.objective_function, self.initial_weights, args=(sliced_assets), 
                                                 method= "SLSQP", constraints=cons, bounds=bounds, 
                                                 options={'disp': True, #Turn off display in production

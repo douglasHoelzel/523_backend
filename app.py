@@ -18,13 +18,14 @@ def hello_world():
 #Start date
 #End date
 @app.route('/api/info', methods=['POST']) 
-def parse_info():
+def parse_info():   
     
     stocks = request.get_json()['assets']
     benchmark = request.get_json()['benchmark']
     start_date = pd.to_datetime(request.get_json()['start_date']) #Datetime object
     end_date = pd.to_datetime(request.get_json()['end_date'])
     frequency = request.get_json()['frequency']
+    transaction_costs = request.get_json()['transaction_costs'] #0 or 1
 
     #Initial data pull
     results = pull_data(stocks, start_date, end_date) 
@@ -38,7 +39,7 @@ def parse_info():
     benchmark_return_dict = calculate_returns(benchmark_results['stock_dict'])
 
     #Output for the portfolio
-    portfolio = Portfolio(start_date, end_date, return_dict, interest_rates, frequency)
+    portfolio = Portfolio(start_date, end_date, return_dict, interest_rates, frequency, transaction_costs)
     output = portfolio.optimize_portfolio()
 
     #Output for the benchmark
