@@ -99,7 +99,7 @@ class Portfolio(object):
                 sliced_assets = self.assets.loc[self.rebalance_dates[i] : self.rebalance_dates[i+1]]
             
             #If transaction costs, subtract 2.5% from returns on rebalance date
-            if self.transaction_costs == 1:
+            if int(self.transaction_costs) == 1:
                 sliced_assets.iloc[0] = sliced_assets.iloc[0] - .025
                 
             results = scipy.optimize.minimize(self.objective_function, self.initial_weights, args=(sliced_assets), 
