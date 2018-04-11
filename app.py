@@ -41,13 +41,6 @@ def parse_info():
     #Output for the portfolio
     portfolio = Portfolio(start_date, end_date, return_dict, interest_rates, frequency, transaction_costs)
     output = portfolio.optimize_portfolio()
-    #cumsum_values = list(pd.Series(list(output['optimized_returns'].values())).cumsum())
-    #cumulative_output = dict(zip(output['optimized_returns'].keys(),cumsum_values))
-    cumulative_output = {}
-    value = 0
-    for key in output['optimized_returns'].keys():
-        value += output['optimized_returns'][key]
-        cumulative_output[key] = value
 
     #Output for the benchmark
     benchmark = Benchmark(benchmark_return_dict,benchmark)
@@ -56,7 +49,7 @@ def parse_info():
     #BELOW THIS LINE IS USED FOR TESTING ON LOCALHOST
 
     return jsonify({"optimized_returns": output['optimized_returns'],
-                    "optimized_cumulative_returns": cumulative_output,
+                    "optimized_cumulative_returns": output['cumulative_returns'],
                    "optimized_weights": output['optimized_weights'],
                    "benchmark_returns": benchmark_output['benchmark_monthly_returns'],
                    "benchmark_cumulative_returns": benchmark_output['benchmark_cumulative_returns']
@@ -701,4 +694,4 @@ def test_info():
 
 #For Production
 if __name__ == "__main__":
-	app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=True, host='0.0.0.0', port=8080)

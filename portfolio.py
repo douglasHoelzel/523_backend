@@ -24,6 +24,7 @@ class Portfolio(object):
         self.frequency = frequency
         self.rebalance_dates = None
         self.rebalance_date_returns = {} #see optimize portfolio
+        self.cumulative_returns = {} #see optimize portfolio
         self.calculate_rebalance_date() #Fill self.rebalance_dates
         self.calculate_assets() #Fills self.assets
         self.transaction_costs = transaction_costs # 0 or 1
@@ -90,6 +91,7 @@ class Portfolio(object):
         
         
         date_len = len(self.rebalance_dates)
+        cumulative_return_tracker = 0 # will update to keep track of current cumulative return
         for i in range(date_len):
             if date_len - i == 1:
                 #This is the last value
@@ -114,8 +116,11 @@ class Portfolio(object):
             
             #Assign return values
             self.rebalance_date_returns[self.rebalance_dates[i].strftime('%Y-%m-%d')] = float(self.calculate_total_return(results.x, sliced_assets))
+            cumulative_return_tracker = cumulative_return_tracker + float(self.calculate_total_return(results.x, sliced_assets))
+            self.cumulative_returns[self.rebalance_dates[i].strftime('%Y-%m-%d')] = cumulative_return_tracker
         
         return {"optimized_weights": self.optimized_weights,
+                "cumulative_returns": self.cumulative_returns,
                 "optimized_returns": self.rebalance_date_returns
                 }
 
