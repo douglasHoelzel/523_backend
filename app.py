@@ -41,8 +41,13 @@ def parse_info():
     #Output for the portfolio
     portfolio = Portfolio(start_date, end_date, return_dict, interest_rates, frequency, transaction_costs)
     output = portfolio.optimize_portfolio()
-    cumsum_values = list(pd.Series(list(output['optimized_returns'].values())).cumsum())
-    cumulative_output = dict(zip(output['optimized_returns'].keys(),cumsum_values))
+    #cumsum_values = list(pd.Series(list(output['optimized_returns'].values())).cumsum())
+    #cumulative_output = dict(zip(output['optimized_returns'].keys(),cumsum_values))
+    cumulative_output = {}
+    value = 0
+    for key in output['optimized_returns'].keys():
+        value += output['optimized_returns'][key]
+        cumulative_output[key] = value
 
     #Output for the benchmark
     benchmark = Benchmark(benchmark_return_dict,benchmark)
