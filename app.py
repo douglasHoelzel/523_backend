@@ -21,7 +21,7 @@ def hello_world():
 def parse_info():   
     
     stocks = request.get_json()['assets']
-    benchmark = request.get_json()['benchmark']
+    benchmark = request.get_json()['benchmark'] #Needs to be a list
     start_date = pd.to_datetime(request.get_json()['start_date']) #Datetime object
     end_date = pd.to_datetime(request.get_json()['end_date'])
     frequency = request.get_json()['frequency']
@@ -46,12 +46,17 @@ def parse_info():
     benchmark = Benchmark(benchmark_return_dict,benchmark)
     benchmark_output = benchmark.form_returns()
 
+    #Find matching keys, build joint data structure
+    common_keys = set(output['cumulative_returns']).intersection(benchmark_output["benchmark_cumulative_returns"])
+    intersect_dict = {}
+    for key in common_keys:
+        intersect_dict[key] = [output['cumulative_returns'][key],benchmark_output["benchmark_cumulative_returns"][key]]
+
     #BELOW THIS LINE IS USED FOR TESTING ON LOCALHOST
 
-    return jsonify({"optimized_returns": output['optimized_returns'],
-                    "optimized_cumulative_returns": output['cumulative_returns'],
+    return jsonify({"optimized_cumulative_returns": output['cumulative_returns'],
                    "optimized_weights": output['optimized_weights'],
-                   "benchmark_returns": benchmark_output['benchmark_monthly_returns'],
+                   "benchmark_portfolio_intersection": intersect_dict,
                    "benchmark_cumulative_returns": benchmark_output['benchmark_cumulative_returns']
                      })
     
