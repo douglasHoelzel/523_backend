@@ -87,7 +87,7 @@ class Portfolio(object):
                 'fun': lambda x: np.sum(np.abs(x)) - 1}  #Weights must sum to one (absolute value)
 
         #Element bounds
-        bounds = [(-1., 1.)] * len(self.initial_weights) #Shorts are allowed, no leverage
+        bounds = [(-1, 1)] * len(self.initial_weights) #Shorts are allowed, no leverage
         
         
         date_len = len(self.rebalance_dates)
@@ -105,7 +105,7 @@ class Portfolio(object):
                 sliced_assets.iloc[0] = sliced_assets.iloc[0] - .025
                 
             results = scipy.optimize.minimize(self.objective_function, self.initial_weights, args=(sliced_assets), 
-                                                method= "SLSQP", constraints=cons, bounds=bounds, 
+                                                method= "SLSQP", constraints=cons, bounds=bounds, tol=None,
                                                 options={'disp': True, #Turn off display in production
                                                          'maxiter': 1000})
             
