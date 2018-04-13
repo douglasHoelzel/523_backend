@@ -1,9 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from data import pull_data, get_risk_free_rate, calculate_returns
 from portfolio import Portfolio
 from benchmark import Benchmark
 import pandas as pd
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -19,7 +20,14 @@ def hello_world():
 #End date
 @app.route('/api/info', methods=['POST']) 
 def parse_info():   
-    
+
+    #check date is valid format
+    pattern = re.compile("^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$")
+    if not pattern.fullmatch(request.get_json()['start_date']):
+        abort(400)
+    if not pattern.fullmatch(request.get_json()['end_date']):
+        abort(400)
+
     stocks = request.get_json()['assets']
     print(stocks)
     print(type(stocks))
@@ -38,6 +46,18 @@ def parse_info():
     transaction_costs = request.get_json()['transaction_costs'] #0 or 1
     print(transaction_costs)
     print(type(transaction_costs))
+
+    #is date valid range?  
+    if end_date < start_date:
+        abort(400)
+        
+    #check if is string, make list if string
+    if isinstance(benchmark, str):
+        benchmark = [benchmark]
+
+    #ensure stocks is list
+    if not isinstance(stocks, list) :
+        abort(400)
 
     #Initial data pull
     results = pull_data(stocks, start_date, end_date) 
