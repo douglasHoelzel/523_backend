@@ -32,9 +32,58 @@ def parse_info():
     transaction_costs = request.get_json()['transaction_costs'] #0 or 1
 
     #is date valid range?  
-    if end_date < start_date:
-        abort(400)
+    #Error code 1
+    if start_date >= end_date:
+        return jsonify({
+            "Error Code" : "1",
+            "Error Description" : "Inverted Date Range"
+        })
+
+    #Used for date interval checking
+    date_diff = end_date - start_date
         
+    #Error code 2
+    if frequency == "monthly" and date_diff.days > 731: #2 years worth of days
+        return jsonify({
+            "Error Code" : "2",
+            "Error Description" : "Too long of a date range (monthly). Please enter a range interval between 4 months and 2 years"
+        })
+
+    #Error code 3
+    if frequency == "quarterly" and date_diff.days > 1461: #4 years worth of days
+        return jsonify({
+            "Error Code" : "3",
+            "Error Description" : "Too long of a date range (quarterly). Please enter a range interval between 1 year and 4 years"
+        })
+
+    #Error code 4
+    if frequency == "biannual" and date_diff.days > 2922: #4 years worth of days
+        return jsonify({
+            "Error Code" : "4",
+            "Error Description" : "Too long of a date range (biannual). Please enter a range interval between 2 year and 8 years"
+        })  
+
+    #Error code 5
+    if frequency == "monthly" and date_diff.days < 120: #4 months worth of days
+        return jsonify({
+            "Error Code" : "5",
+            "Error Description" : "Too short of a date range (monthly). Please enter a range interval between 4 months and 2 years"
+        })     
+
+    #Error code 6
+    if frequency == "quarterly" and date_diff.days < 365: #1 year worth of days
+        return jsonify({
+            "Error Code" : "6",
+            "Error Description" : "Too short of a date range (quarterly). Please enter a range interval between 1 year and 4 years"
+        })  
+
+    #Error code 7
+    if frequency == "biannual" and date_diff.days < 731: #2 years worth of days
+        return jsonify({
+            "Error Code" : "7",
+            "Error Description" : "Too short of a date range (biannual). Please enter a range interval between 2 year and 8 years"
+        })          
+
     #check if is string, make list if string
     if isinstance(benchmark, str):
         benchmark = [benchmark]
