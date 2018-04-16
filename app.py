@@ -14,10 +14,6 @@ CORS(app)
 def hello_world():
     return 'Hello World'
 
-#Take in information from user:
-#List of assets
-#Start date
-#End date
 @app.route('/api/info', methods=['POST']) 
 def parse_info():   
 
@@ -29,23 +25,11 @@ def parse_info():
         abort(400)
 
     stocks = request.get_json()['assets']
-    print(stocks)
-    print(type(stocks))
     benchmark = request.get_json()['benchmark'] #Needs to be a list
-    print(benchmark)
-    print(type(benchmark))
     start_date = pd.to_datetime(request.get_json()['start_date']) #Datetime object
-    print(start_date)
-    print(type(start_date))
     end_date = pd.to_datetime(request.get_json()['end_date'])
-    print(end_date)
-    print(type(end_date))
     frequency = request.get_json()['frequency']
-    print(frequency)
-    print(type(frequency))
     transaction_costs = request.get_json()['transaction_costs'] #0 or 1
-    print(transaction_costs)
-    print(type(transaction_costs))
 
     #is date valid range?  
     if end_date < start_date:

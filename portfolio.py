@@ -19,7 +19,6 @@ class Portfolio(object):
         self.assets = None
         self.initial_weights = np.ones(self.number_assets) / self.number_assets #Initialize to equal weight
         self.optimized_weights = {} #see optimize portfolio
-        #self.prestart_return_dict = prestart_return_dict #Would be used in alternative volatility calculations
         self.dates = return_dict[next(iter(return_dict))].index #Potentially useful if we do daily values
         self.frequency = frequency
         self.rebalance_dates = None
@@ -31,11 +30,18 @@ class Portfolio(object):
 
     #Fill in rebalance dates
     def calculate_rebalance_date(self):
-        if self.frequency == 'daily': #Handle daily case
-            self.rebalance_dates = self.dates
-        elif self.frequency == 'weekly': #Handle weekly case
-            temp = self.return_dict[next(iter(self.return_dict))].resample('W').sum()
-            self.rebalance_dates = temp.index
+        if self.frequency == 'biannual': #Currently not used
+            temp = self.return_dict[next(iter(self.return_dict))].resample('6M').sum().index[:-1]
+            date_list = [self.return_dict[next(iter(self.return_dict))].index[0]]
+            for t in temp:
+                date_list.append(t)
+            self.rebalance_dates = date_list
+        elif self.frequency == 'quarterly': #Currently not used
+            temp = self.return_dict[next(iter(self.return_dict))].resample('3M').sum().index[:-1]
+            date_list = [self.return_dict[next(iter(self.return_dict))].index[0]]
+            for t in temp:
+                date_list.append(t)
+            self.rebalance_dates = date_list
         elif self.frequency == 'monthly': #Handle monthly case
             temp = self.return_dict[next(iter(self.return_dict))].resample('M').sum().index[:-1]
             date_list = [self.return_dict[next(iter(self.return_dict))].index[0]]
