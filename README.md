@@ -6,6 +6,8 @@ This is the Python backend for my Computer Science 523 class (Software Engineeri
 
 To see the system running, visit https://qfe-app-523-maguilar.cloudapps.unc.edu/#!/. There is an additional README file on this page with more specific instructions
 
+If you want to install and run the backend on a local device, installing Anaconda is recommended. Once Anaconda is installed, add all dependancies using the method mentioned in "Prerequisites". Note, any interface attempting to access the locally running backend will need to update URLs for AJAX calls
+
 ### Prerequisites
 
 To install depenencies use "pip install -r requirements.txt" from the directory where the code is located. For a list of dependancies, check out requirements.txt 
