@@ -31,7 +31,7 @@ benchmark_test_suite.py = All unit tests related to the benchmark.py object
 
 ## Running the tests
 
-Navigate to the directory containing any of the test suites. Then, for example, run "pytest portfolio_test_suite.py" and the unit tests should execute successfully
+Navigate to the directory containing any of the test suites. Then, for example, run "pytest portfolio_test_suite.py" and the unit tests for the selected module should execute successfully
 
 ## Deployment
 
