@@ -1,10 +1,10 @@
-# Project Title
+# QFE Project
 
 This is the Python backend for my Computer Science 523 class (Software Engineering). The purpose of this application is to retrieve price information from Quandl on a set of financial assets, convert them to log returns, form a portfolio, and optimize that portfolio given a set of parameters. Overall, this code creates the necessary data for our frontend view
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+To see the system running, visit https://qfe-app-523-maguilar.cloudapps.unc.edu/#!/. There is an additional README file on this page with more specific instructions
 
 ### Prerequisites
 
