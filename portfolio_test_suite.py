@@ -14,6 +14,12 @@ def initialize_variables():
     pytest.transaction_costs = 0
 
 @pytest.fixture
+def initialize_pull_variables():
+    pytest.stocks = ['IBB','FB','GOOGL','IYH','IBM','MMM']
+    pytest.start_date = pd.to_datetime('2018-01-01')
+    pytest.end_date = pd.to_datetime('2018-04-01')
+
+@pytest.fixture
 def initialize_returns_variables():
     pytest.stocks = ['IBB','FB','GOOGL','IYH','IBM','MMM']
     pytest.start_date = pd.to_datetime('2018-01-01')
@@ -66,7 +72,7 @@ def initialize_returns_portfolio(initialize_returns_variables, init_returns_pull
 
 class TestDataClass(object):
     #Test to make sure we get same number of assets back from datapull
-    def test_stock_count(self, initialize_variables):
+    def test_stock_count(self, initialize_pull_variables):
         #Configuration
         stocks = pytest.stocks
         start_date = pytest.start_date
@@ -78,7 +84,7 @@ class TestDataClass(object):
         assert len(results['stock_dict'].keys()) == len(stocks) #length of stocks list should be the same in and out
 
     #Test to make sure we get the correct number of rows from data pull
-    def test_data_length(self, initialize_variables):
+    def test_data_length(self, initialize_pull_variables):
         #Configuration
         stocks = pytest.stocks
         start_date = pytest.start_date
@@ -87,11 +93,12 @@ class TestDataClass(object):
 
         #Nested JSON
         results = pull_data(stocks, start_date, end_date) 
+        print(len(results))
 
-        assert results['stock_dict']['IBB'].shape[0] == 21 #21 trading days in January 2018
+        assert results['stock_dict']['IBB'].shape[0] == 61 #61 trading days in January to April 2018
 
     #Test to ensure correct risk free rate
-    def test_dailyrf_rate(self):
+    def test_dailyrf_rate(self, initialize_variables):
         #Configuration
         start_date = pytest.start_date
         end_date = pytest.end_date
@@ -183,13 +190,13 @@ class TestPortfolioClass(object):
 
         assert (tempResult[0] - .0425) < .0001 #.0425 is the result of multiplying the weight by the first return
 
-    # #test accuracy of sum_squared_differences
-    # def test_sum_squared_differences(self, initialize_returns_portfolio):
+    # #test sum_squared_differences
+    def test_sum_squared_differences(self, initialize_returns_portfolio):
         
         
-    #     tempResult = pytest.testPortfolio.sum_squared_differences(pytest.testPortfolio.initial_weights, pytest.testPortfolio.assets)
+        tempResult = pytest.testPortfolio.sum_squared_differences(pytest.testPortfolio.initial_weights, pytest.testPortfolio.assets)
 
-    #     assert 1
+        assert tempResult - .000048 < .000001
 
     #test accuracy of sharpe_ratio function
     def test_sharpe_ratio(self, initialize_returns_portfolio):
