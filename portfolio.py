@@ -6,9 +6,9 @@ class Portfolio(object):
 
     ####### Notes #######
 
-    #Right now we're only concerned with monthly frequency
+    #Right now we're only concerned with monthly, quarterly, and biannual frequency
     #Need to explore new objective functions to optimize for
-    #Need to find a volatility proxy that will work with shorter intervals
+    #Need to find a volatility proxy that will work with shorter intervals, hence no daily rebalancing
     
     def __init__(self, start_date, end_date, return_dict, interest_rates, frequency, transaction_costs): 
         self.number_assets = len(return_dict.keys()) #Stock symbols are the keys 
@@ -30,13 +30,13 @@ class Portfolio(object):
 
     #Fill in rebalance dates
     def calculate_rebalance_date(self):
-        if self.frequency == 'biannual': #Currently not used
+        if self.frequency == 'biannual': #Rebalance twice a year
             temp = self.return_dict[next(iter(self.return_dict))].resample('6M').sum().index[:-1]
             date_list = [self.return_dict[next(iter(self.return_dict))].index[0]]
             for t in temp:
                 date_list.append(t)
             self.rebalance_dates = date_list
-        elif self.frequency == 'quarterly': #Currently not used
+        elif self.frequency == 'quarterly': #Rebalance every quarter
             temp = self.return_dict[next(iter(self.return_dict))].resample('3M').sum().index[:-1]
             date_list = [self.return_dict[next(iter(self.return_dict))].index[0]]
             for t in temp:
