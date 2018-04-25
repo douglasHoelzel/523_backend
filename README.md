@@ -26,6 +26,7 @@ data_test_suite.py = All unit tests related to the data.py object
 
 portfolio_test_suite.py = All unit tests related to the portfolio.py and benchmark.py objects
 
+benchmark_test_suite.py = All unit tests related to the benchmark.py objects
 
 ## Running the tests
 
