@@ -24,9 +24,7 @@ data.py = The module used for data preprocessing needed in portfolio.py and benc
 
 data_test_suite.py = All unit tests related to the data.py object
 
-portfolio_test_suite.py = All unit tests related to the portfolio.py object
-
-benchmark_test_suite.py = All unit tests related to the benchmark.py object
+portfolio_test_suite.py = All unit tests related to the portfolio.py and benchmark.py objects
 
 
 ## Running the tests
