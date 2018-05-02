@@ -6,7 +6,7 @@ This is the Python backend for my Computer Science 523 class (Software Engineeri
 
 To see the system running, visit https://qfe-app-523-maguilar.cloudapps.unc.edu/#!/. There is an additional README file on this page with more specific instructions
 
-If you want to install and run the backend on a local device, installing Anaconda is recommended. Once Anaconda is installed, add all dependancies using the method mentioned in "Prerequisites". Note, any interface attempting to access the locally running backend will need to update URLs for AJAX calls
+If you want to install and run the backend on a local device, installing Anaconda is recommended. Once Anaconda is installed, add all dependancies using the method mentioned in "Prerequisites". Note, any interface attempting to access the locally running backend will need to update URLs for AJAX calls. Use Python 3's built in http.server method to run the backend.
 
 ### Prerequisites
 
@@ -30,7 +30,7 @@ benchmark_test_suite.py = All unit tests related to the benchmark.py objects
 
 ## Running the tests
 
-Navigate to the directory containing any of the test suites. Then, for example, run "pytest portfolio_test_suite.py" and the unit tests for the selected module should execute successfully. An internet connection is required to run the tests.
+Navigate to the directory containing any of the test suites. Then, for example, run "pytest portfolio_test_suite.py" and the unit tests for the selected module should execute successfully. An internet connection is required to run the tests. Also, the code must be on your local device, but it does not need to be served up at the same time (IE, using python's http.server).
 
 ## Deployment
 
